@@ -30,11 +30,12 @@
                     android:id="@+id/edtLoaiSP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="LoaiSP"
+                    android:hint="Loại sản phẩm"
                     android:padding="10dp"
                     android:background="@drawable/edit_text_background"
                     android:drawableLeft="@android:drawable/ic_menu_edit"
                     android:drawablePadding="10dp" />
+
                 <EditText
                     android:id="@+id/edtTenSP"
                     android:layout_width="match_parent"
@@ -57,27 +58,31 @@
                     android:drawablePadding="10dp"
                     android:layout_marginTop="10dp" />
 
-                <EditText
-                    android:id="@+id/edtNgaySX"
+                <!-- TextView để chọn ngày sản xuất -->
+                <TextView
+                    android:id="@+id/tvNgaySX"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Ngày sản xuất (dd/MM/yyyy)"
+                    android:hint="Chọn ngày sản xuất"
                     android:padding="10dp"
                     android:background="@drawable/edit_text_background"
                     android:drawableLeft="@android:drawable/ic_menu_my_calendar"
                     android:drawablePadding="10dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000" />
 
-                <EditText
-                    android:id="@+id/edtHanSD"
+                <!-- TextView để chọn hạn sử dụng -->
+                <TextView
+                    android:id="@+id/tvHanSD"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Hạn sử dụng (dd/MM/yyyy)"
+                    android:hint="Chọn hạn sử dụng"
                     android:padding="10dp"
                     android:background="@drawable/edit_text_background"
                     android:drawableLeft="@android:drawable/ic_menu_my_calendar"
                     android:drawablePadding="10dp"
-                    android:layout_marginTop="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:textColor="#000000" />
 
                 <EditText
                     android:id="@+id/edtSoLuong"
@@ -115,12 +120,13 @@
                     android:background="@android:color/holo_red_dark"
                     android:textColor="#FFFFFF"
                     android:layout_marginTop="10dp" />
+
                 <Button
                     android:id="@+id/btnTroLai"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="🗑️ Trở lại "
-                    android:background="@android:color/holo_red_dark"
+                    android:text="↩️ Trở lại"
+                    android:background="@android:color/holo_blue_dark"
                     android:textColor="#FFFFFF"
                     android:layout_marginTop="10dp" />
 

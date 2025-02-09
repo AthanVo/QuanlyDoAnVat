@@ -1,11 +1,13 @@
 package com.example.quanlydoanvat.activity;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,12 +15,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.quanlydoanvat.R;
 import com.example.quanlydoanvat.model.Product;
 
+import java.util.Calendar;
+
 public class AddEditActivity extends AppCompatActivity {
 
-    EditText edtTenSP, edtLoaiSP, edtGiaSP, edtNgaySX, edtHanSD, edtSoLuong;
-    Button btnSave, btnDelete, btnTroLai;
+    EditText edtTenSP, edtLoaiSP, edtGiaSP, edtSoLuong;
+    TextView tvNgaySX, tvHanSD;
+    Button btnSave, btnTroLai;
 
-    private Product currentProduct;  // Lưu sản phẩm hiện tại để xử lý
+    private Product currentProduct;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,15 +33,18 @@ public class AddEditActivity extends AppCompatActivity {
         edtTenSP = findViewById(R.id.edtTenSP);
         edtLoaiSP = findViewById(R.id.edtLoaiSP);
         edtGiaSP = findViewById(R.id.edtGiaSP);
-        edtNgaySX = findViewById(R.id.edtNgaySX);
-        edtHanSD = findViewById(R.id.edtHanSD);
         edtSoLuong = findViewById(R.id.edtSoLuong);
+        tvNgaySX = findViewById(R.id.tvNgaySX);
+        tvHanSD = findViewById(R.id.tvHanSD);
 
         btnSave = findViewById(R.id.btnLuu);
-        btnDelete = findViewById(R.id.btnXoa);
         btnTroLai = findViewById(R.id.btnTroLai);
 
-        // Nhận dữ liệu sản phẩm từ Intent
+        // Xử lý sự kiện chọn ngày
+        tvNgaySX.setOnClickListener(v -> showDatePickerDialog(tvNgaySX));
+        tvHanSD.setOnClickListener(v -> showDatePickerDialog(tvHanSD));
+
+        // Nhận dữ liệu sản phẩm từ Intent (nếu có)
         if (getIntent() != null) {
             currentProduct = new Product(
                     getIntent().getStringExtra("tenSP"),
@@ -47,31 +55,39 @@ public class AddEditActivity extends AppCompatActivity {
                     getIntent().getIntExtra("soLuong", 0)
             );
 
-            // Hiển thị thông tin sản phẩm lên các EditText
             edtTenSP.setText(currentProduct.getTenSP());
             edtLoaiSP.setText(currentProduct.getLoaiSP());
             edtGiaSP.setText(String.valueOf(currentProduct.getGiaSP()));
-            edtNgaySX.setText(currentProduct.getNgaySX());
-            edtHanSD.setText(currentProduct.getHanSD());
+            tvNgaySX.setText(currentProduct.getNgaySX());
+            tvHanSD.setText(currentProduct.getHanSD());
             edtSoLuong.setText(String.valueOf(currentProduct.getSoLuong()));
         }
 
-        // Xử lý sự kiện Lưu sản phẩm
         btnSave.setOnClickListener(v -> saveProduct());
-
-        // Xử lý sự kiện Xóa sản phẩm
-        btnDelete.setOnClickListener(v -> deleteProduct());
-
-        // Xử lý sự kiện Quay lại
         btnTroLai.setOnClickListener(v -> finish());
+    }
+
+    private void showDatePickerDialog(TextView textView) {
+        final Calendar calendar = Calendar.getInstance();
+        int year = calendar.get(Calendar.YEAR);
+        int month = calendar.get(Calendar.MONTH);
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        DatePickerDialog datePickerDialog = new DatePickerDialog(this,
+                (view, selectedYear, selectedMonth, selectedDay) -> {
+                    String selectedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
+                    textView.setText(selectedDate);
+                }, year, month, day);
+
+        datePickerDialog.show();
     }
 
     private void saveProduct() {
         String tenSP = edtTenSP.getText().toString().trim();
         String loaiSP = edtLoaiSP.getText().toString().trim();
         String giaSP = edtGiaSP.getText().toString().trim();
-        String ngaySX = edtNgaySX.getText().toString().trim();
-        String hanSD = edtHanSD.getText().toString().trim();
+        String ngaySX = tvNgaySX.getText().toString().trim();
+        String hanSD = tvHanSD.getText().toString().trim();
         String soLuong = edtSoLuong.getText().toString().trim();
 
         if (TextUtils.isEmpty(tenSP) || TextUtils.isEmpty(loaiSP) ||
@@ -85,9 +101,7 @@ public class AddEditActivity extends AppCompatActivity {
             double gia = Double.parseDouble(giaSP);
             int sl = Integer.parseInt(soLuong);
 
-            // Kiểm tra xem có đang chỉnh sửa sản phẩm hay không
             if (currentProduct != null) {
-                // Cập nhật thông tin sản phẩm hiện tại
                 currentProduct.setTenSP(tenSP);
                 currentProduct.setLoaiSP(loaiSP);
                 currentProduct.setGiaSP(gia);
@@ -95,30 +109,17 @@ public class AddEditActivity extends AppCompatActivity {
                 currentProduct.setHanSD(hanSD);
                 currentProduct.setSoLuong(sl);
             } else {
-                // Tạo sản phẩm mới nếu không có sản phẩm hiện tại
                 currentProduct = new Product(tenSP, loaiSP, gia, ngaySX, hanSD, sl);
             }
 
-            // Trả kết quả về ProductListActivity để cập nhật giao diện
             Intent resultIntent = new Intent();
             resultIntent.putExtra("updatedProduct", currentProduct);
             setResult(RESULT_OK, resultIntent);
 
             Toast.makeText(this, "Lưu sản phẩm thành công!", Toast.LENGTH_SHORT).show();
-            finish(); // Quay lại màn hình trước đó
+            finish();
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Giá hoặc số lượng không hợp lệ!", Toast.LENGTH_SHORT).show();
         }
-    }
-
-
-    private void deleteProduct() {
-        // Giả lập xóa sản phẩm bằng cách trả kết quả về ProductListActivity
-        Intent intent = new Intent();
-        Product currentProduct = null;
-        intent.putExtra("deleteProduct", currentProduct.getTenSP());
-        setResult(RESULT_OK, intent);
-        Toast.makeText(this, "Đã xóa sản phẩm!", Toast.LENGTH_SHORT).show();
-        finish();
     }
 }
