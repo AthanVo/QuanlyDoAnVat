@@ -1,68 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:layout_width="match_parent"
-    android:layout_height="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="10dp"
-    android:layout_marginTop="80dp"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:gravity="center"
+    android:padding="20dp"
+    android:background="@color/colorBackground">
+
+    <!-- Tiêu đề -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hệ thống đăng nhập"
+        android:text="Đăng nhập"
+        android:textSize="32sp"
         android:textStyle="bold"
-        android:textColor="#3F5185"
-        android:textSize="30dp"
-        android:fontFamily="cursive"
-        android:layout_gravity="center"
-        />
+        android:textColor="@color/colorPrimary"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:layout_marginBottom="20dp"/>
+
+    <!-- Input tài khoản -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:hint="Tài khoản"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusBottomEnd="15dp">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextTaiKhoan"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Tài khoản"
             android:inputType="text"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- Input mật khẩu -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:passwordToggleEnabled="true">
+        android:hint="Mật khẩu"
+        app:boxBackgroundMode="filled"
+        app:boxCornerRadiusTopStart="15dp"
+        app:boxCornerRadiusTopEnd="15dp"
+        app:boxCornerRadiusBottomStart="15dp"
+        app:boxCornerRadiusBottomEnd="15dp"
+        app:endIconMode="password_toggle">
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/editTextMatKhau"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Mật khẩu"
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- CheckBox Lưu tài khoản -->
     <CheckBox
         android:id="@+id/checkBoxLuu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Lưu tài khoản" />
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center">
-    <Button
-        android:id="@+id/btnDangNhap"
-        android:layout_width="wrap_content"
+        android:text="Lưu tài khoản"
+        android:textColor="@color/colorPrimary"
+        android:layout_marginTop="10dp"
+        android:padding="5dp"/>
+
+    <!-- Nút Đăng nhập & Đăng ký -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Đăng nhập"
-        android:backgroundTint="#3F5185"
-        android:layout_gravity="center"
-        android:layout_marginRight="10dp">
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_marginTop="20dp">
 
-     <Button
-         adnroid:id="@+id/btnDangKy"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         android:text="Đăng ký"
-         android:backgroundTint="#3F5185">
+        <Button
+            android:id="@+id/btnDangNhap"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Đăng nhập"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/colorPrimary"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/rounded_button"/>
 
-</LinearLayout>
+        <Button
+            android:id="@+id/btnDangKy"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:text="Đăng ký"
+            android:textSize="16sp"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@color/colorSecondary"
+            android:background="@drawable/rounded_button"/>
+    </LinearLayout>
 </LinearLayout>
