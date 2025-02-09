@@ -115,6 +115,14 @@
                     android:background="@android:color/holo_red_dark"
                     android:textColor="#FFFFFF"
                     android:layout_marginTop="10dp" />
+                <Button
+                    android:id="@+id/btnTroLai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🗑️ Trở lại "
+                    android:background="@android:color/holo_red_dark"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="10dp" />
 
             </LinearLayout>
         </androidx.cardview.widget.CardView>

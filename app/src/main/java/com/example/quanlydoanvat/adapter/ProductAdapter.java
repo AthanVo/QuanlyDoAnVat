@@ -3,7 +3,6 @@ package com.example.quanlydoanvat.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,15 +16,27 @@ import java.util.List;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductViewHolder> {
 
     private List<Product> productList;
+    private OnProductClickListener listener;
 
-    public ProductAdapter(List<Product> productList) {
+    public interface OnProductClickListener {
+        void onProductClick(Product product);
+    }
+
+    public ProductAdapter(List<Product> productList, OnProductClickListener listener) {
         this.productList = productList;
+        this.listener = listener;
+    }
+
+    public void updateProductList(List<Product> newList) {
+        productList = newList;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public ProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_product, parent, false);
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_product, parent, false);
         return new ProductViewHolder(view);
     }
 
@@ -38,6 +49,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         holder.tvProductQuantity.setText("SL: " + product.getSoLuong());
         holder.tvManufactureDate.setText("NSX: " + product.getNgaySX());
         holder.tvExpiryDate.setText("HSD: " + product.getHanSD());
+
+        holder.itemView.setOnClickListener(v -> listener.onProductClick(product));
     }
 
     @Override
@@ -45,11 +58,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
         return productList.size();
     }
 
-    public static class ProductViewHolder extends RecyclerView.ViewHolder {
+    static class ProductViewHolder extends RecyclerView.ViewHolder {
         TextView tvProductName, tvProductCategory, tvProductPrice, tvProductQuantity, tvManufactureDate, tvExpiryDate;
-        ImageView imgProduct;
 
-        public ProductViewHolder(@NonNull View itemView) {
+        ProductViewHolder(@NonNull View itemView) {
             super(itemView);
             tvProductName = itemView.findViewById(R.id.tvProductName);
             tvProductCategory = itemView.findViewById(R.id.tvProductCategory);
@@ -57,7 +69,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
             tvProductQuantity = itemView.findViewById(R.id.tvProductQuantity);
             tvManufactureDate = itemView.findViewById(R.id.tvManufactureDate);
             tvExpiryDate = itemView.findViewById(R.id.tvExpiryDate);
-            imgProduct = itemView.findViewById(R.id.imgProduct);
         }
     }
 }

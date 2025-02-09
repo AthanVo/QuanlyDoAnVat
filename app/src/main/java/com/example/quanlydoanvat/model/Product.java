@@ -1,14 +1,12 @@
 package com.example.quanlydoanvat.model;
 
-public class Product {
-    private String tenSP;
-    private String loaiSP;
-    private double giaSP;       // Sửa kiểu dữ liệu từ String -> double
-    private String ngaySX;
-    private String hanSD;
+import java.io.Serializable;
+
+public class Product implements Serializable {
+    private String tenSP, loaiSP, ngaySX, hanSD;
+    private double giaSP;
     private int soLuong;
 
-    // Constructor
     public Product(String tenSP, String loaiSP, double giaSP, String ngaySX, String hanSD, int soLuong) {
         this.tenSP = tenSP;
         this.loaiSP = loaiSP;
@@ -19,51 +17,21 @@ public class Product {
     }
 
     // Getter và Setter
-    public String getTenSP() {
-        return tenSP;
-    }
+    public String getTenSP() { return tenSP; }
+    public void setTenSP(String tenSP) { this.tenSP = tenSP; }
 
-    public void setTenSP(String tenSP) {
-        this.tenSP = tenSP;
-    }
+    public String getLoaiSP() { return loaiSP; }
+    public void setLoaiSP(String loaiSP) { this.loaiSP = loaiSP; }
 
-    public String getLoaiSP() {
-        return loaiSP;
-    }
+    public double getGiaSP() { return giaSP; }
+    public void setGiaSP(double giaSP) { this.giaSP = giaSP; }
 
-    public void setLoaiSP(String loaiSP) {
-        this.loaiSP = loaiSP;
-    }
+    public String getNgaySX() { return ngaySX; }
+    public void setNgaySX(String ngaySX) { this.ngaySX = ngaySX; }
 
-    public double getGiaSP() {
-        return giaSP;
-    }
+    public String getHanSD() { return hanSD; }
+    public void setHanSD(String hanSD) { this.hanSD = hanSD; }
 
-    public void setGiaSP(double giaSP) {
-        this.giaSP = giaSP;
-    }
-
-    public String getNgaySX() {
-        return ngaySX;
-    }
-
-    public void setNgaySX(String ngaySX) {
-        this.ngaySX = ngaySX;
-    }
-
-    public String getHanSD() {
-        return hanSD;
-    }
-
-    public void setHanSD(String hanSD) {
-        this.hanSD = hanSD;
-    }
-
-    public int getSoLuong() {
-        return soLuong;
-    }
-
-    public void setSoLuong(int soLuong) {
-        this.soLuong = soLuong;
-    }
+    public int getSoLuong() { return soLuong; }
+    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
 }

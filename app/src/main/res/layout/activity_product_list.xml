@@ -6,6 +6,7 @@
     android:padding="8dp"
     android:background="#F5F5F5">
 
+    <!-- Tiêu đề -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,10 +17,23 @@
         android:padding="8dp"
         android:textColor="#000" />
 
+    <!-- Spinner lọc loại sản phẩm -->
+    <Spinner
+        android:id="@+id/spinnerCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        android:background="@android:drawable/btn_dropdown"
+        android:spinnerMode="dropdown" />
+
+    <!-- RecyclerView hiển thị danh sách sản phẩm -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerViewProducts"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:padding="4dp"
         android:clipToPadding="false" />
+
 </LinearLayout>
