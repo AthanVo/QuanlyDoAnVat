@@ -35,7 +35,7 @@
             android:id="@+id/editTextMatKhau"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/inputEditMatKhau"
+            android:hint="Mật khẩu"
             android:inputType="textPassword"/>
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -43,13 +43,26 @@
         android:id="@+id/checkBoxLuu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/checkBoxLuu" />
-
+        android:text="Lưu tài khoản" />
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
     <Button
-        android:id="@+id/buttonDangNhap"
+        android:id="@+id/btnDangNhap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/buttonDangNhap"
+        android:text="Đăng nhập"
         android:backgroundTint="#3F5185"
-        android:layout_gravity="center"/>
+        android:layout_gravity="center"
+        android:layout_marginRight="10dp">
+
+     <Button
+         adnroid:id="@+id/btnDangKy"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Đăng ký"
+         android:backgroundTint="#3F5185">
+
+</LinearLayout>
 </LinearLayout>
