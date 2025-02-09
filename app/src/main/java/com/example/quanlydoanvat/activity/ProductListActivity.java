@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -26,10 +27,12 @@ public class ProductListActivity extends AppCompatActivity {
     private ProductAdapter productAdapter;
     private List<Product> productList;
     private Spinner spinnerCategory;
+    private ImageButton fabAddProduct;
 
-    private static final int REQUEST_CODE_EDIT = 1;
+    private static final int REQUEST_CODE_ADD = 1;
+    private static final int REQUEST_CODE_EDIT = 2;
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint({"MissingInflatedId", "WrongViewCast"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,19 +40,17 @@ public class ProductListActivity extends AppCompatActivity {
 
         recyclerView = findViewById(R.id.recyclerViewProducts);
         spinnerCategory = findViewById(R.id.spinnerCategory);
+        fabAddProduct = findViewById(R.id.fabAddProduct);
 
-        // Khởi tạo danh sách sản phẩm mẫu
         productList = new ArrayList<>();
         productList.add(new Product("Snack Khoai Tây", "Đồ ăn vặt", 25000, "01/01/2024", "01/01/2025", 20));
         productList.add(new Product("Bim Bim Tôm Cay", "Đồ ăn mặn", 18000, "15/12/2023", "15/06/2024", 35));
-        productList.add(new Product("Kẹo Dẻo Trái Cây", "Đồ ngọt", 30000, "20/11/2023", "20/05/2024", 15));
+        productList.add(new Product("Kẹo Dẻ Trái Cây", "Đồ ngọt", 30000, "20/11/2023", "20/05/2024", 15));
 
-        // Cài đặt RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         productAdapter = new ProductAdapter(productList, this::onProductClick);
         recyclerView.setAdapter(productAdapter);
 
-        // Xử lý sự kiện chọn loại sản phẩm từ Spinner (lọc sản phẩm)
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -59,12 +60,15 @@ public class ProductListActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // Không làm gì khi không chọn
             }
+        });
+
+        fabAddProduct.setOnClickListener(v -> {
+            Intent intent = new Intent(ProductListActivity.this, AddProductActivity.class);
+            startActivityForResult(intent, REQUEST_CODE_ADD);
         });
     }
 
-    // Sự kiện khi click vào sản phẩm
     private void onProductClick(Product product) {
         Intent intent = new Intent(ProductListActivity.this, AddEditActivity.class);
         intent.putExtra("tenSP", product.getTenSP());
@@ -76,7 +80,6 @@ public class ProductListActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_EDIT);
     }
 
-    // Lọc sản phẩm theo loại
     private void filterProducts(String category) {
         List<Product> filteredList = new ArrayList<>();
         if (category.equals("Tất cả")) {
@@ -91,17 +94,19 @@ public class ProductListActivity extends AppCompatActivity {
         productAdapter.updateProductList(filteredList);
     }
 
-    // Xử lý kết quả trả về sau khi chỉnh sửa hoặc xóa sản phẩm
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == RESULT_OK && data != null) {
-            // Kiểm tra xem người dùng đã xóa sản phẩm hay lưu sản phẩm
-            String deletedProductName = data.getStringExtra("deleteProduct");
-            if (deletedProductName != null) {
-                deleteProductByName(deletedProductName);
-            } else {
+            if (requestCode == REQUEST_CODE_ADD) {
+                Product newProduct = (Product) data.getSerializableExtra("newProduct");
+                if (newProduct != null) {
+                    productList.add(newProduct);
+                    productAdapter.notifyDataSetChanged();
+                    Toast.makeText(this, "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                }
+            } else if (requestCode == REQUEST_CODE_EDIT) {
                 Product updatedProduct = (Product) data.getSerializableExtra("updatedProduct");
                 if (updatedProduct != null) {
                     updateProduct(updatedProduct);
@@ -110,25 +115,12 @@ public class ProductListActivity extends AppCompatActivity {
         }
     }
 
-    // Hàm cập nhật sản phẩm trong danh sách
     private void updateProduct(Product updatedProduct) {
         for (int i = 0; i < productList.size(); i++) {
             if (productList.get(i).getTenSP().equals(updatedProduct.getTenSP())) {
                 productList.set(i, updatedProduct);
                 productAdapter.notifyItemChanged(i);
                 Toast.makeText(this, "Cập nhật sản phẩm thành công!", Toast.LENGTH_SHORT).show();
-                return;
-            }
-        }
-    }
-
-    // Hàm xóa sản phẩm trong danh sách
-    private void deleteProductByName(String productName) {
-        for (int i = 0; i < productList.size(); i++) {
-            if (productList.get(i).getTenSP().equals(productName)) {
-                productList.remove(i);
-                productAdapter.notifyItemRemoved(i);
-                Toast.makeText(this, "Đã xóa sản phẩm!", Toast.LENGTH_SHORT).show();
                 return;
             }
         }

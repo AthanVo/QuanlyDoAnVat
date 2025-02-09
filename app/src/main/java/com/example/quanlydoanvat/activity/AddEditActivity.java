@@ -77,7 +77,6 @@ public class AddEditActivity extends AppCompatActivity {
         if (TextUtils.isEmpty(tenSP) || TextUtils.isEmpty(loaiSP) ||
                 TextUtils.isEmpty(giaSP) || TextUtils.isEmpty(ngaySX) ||
                 TextUtils.isEmpty(hanSD) || TextUtils.isEmpty(soLuong)) {
-
             Toast.makeText(this, "Vui lòng nhập đầy đủ thông tin!", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -86,24 +85,37 @@ public class AddEditActivity extends AppCompatActivity {
             double gia = Double.parseDouble(giaSP);
             int sl = Integer.parseInt(soLuong);
 
-            // Cập nhật sản phẩm hiện tại
-            currentProduct.setTenSP(tenSP);
-            currentProduct.setLoaiSP(loaiSP);
-            currentProduct.setGiaSP(gia);
-            currentProduct.setNgaySX(ngaySX);
-            currentProduct.setHanSD(hanSD);
-            currentProduct.setSoLuong(sl);
+            // Kiểm tra xem có đang chỉnh sửa sản phẩm hay không
+            if (currentProduct != null) {
+                // Cập nhật thông tin sản phẩm hiện tại
+                currentProduct.setTenSP(tenSP);
+                currentProduct.setLoaiSP(loaiSP);
+                currentProduct.setGiaSP(gia);
+                currentProduct.setNgaySX(ngaySX);
+                currentProduct.setHanSD(hanSD);
+                currentProduct.setSoLuong(sl);
+            } else {
+                // Tạo sản phẩm mới nếu không có sản phẩm hiện tại
+                currentProduct = new Product(tenSP, loaiSP, gia, ngaySX, hanSD, sl);
+            }
+
+            // Trả kết quả về ProductListActivity để cập nhật giao diện
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("updatedProduct", currentProduct);
+            setResult(RESULT_OK, resultIntent);
 
             Toast.makeText(this, "Lưu sản phẩm thành công!", Toast.LENGTH_SHORT).show();
-            finish();
+            finish(); // Quay lại màn hình trước đó
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Giá hoặc số lượng không hợp lệ!", Toast.LENGTH_SHORT).show();
         }
     }
 
+
     private void deleteProduct() {
         // Giả lập xóa sản phẩm bằng cách trả kết quả về ProductListActivity
         Intent intent = new Intent();
+        Product currentProduct = null;
         intent.putExtra("deleteProduct", currentProduct.getTenSP());
         setResult(RESULT_OK, intent);
         Toast.makeText(this, "Đã xóa sản phẩm!", Toast.LENGTH_SHORT).show();
