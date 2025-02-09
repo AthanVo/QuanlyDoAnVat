@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/textViewDangNhap"
+        android:text="Đăng nhập"
         android:textStyle="bold"
         android:textColor="#3F5185"
         android:textSize="30dp"
