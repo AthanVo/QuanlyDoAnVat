@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "417888566325",
+    "project_id": "quanlydoanvat-81636",
+    "storage_bucket": "quanlydoanvat-81636.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:417888566325:android:4dd7770d3da146ec66057c",
+        "android_client_info": {
+          "package_name": "com.example.quanlydoanvat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3Gc7UakRmhqzCzY7xL1fpGB1WJs9skqs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
