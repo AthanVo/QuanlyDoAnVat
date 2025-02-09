@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="16dp"
+    android:background="#F8F9FA">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp"
+            android:padding="16dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="6dp"
+            android:background="#FFFFFF">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/edtLoaiSP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="LoaiSP"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:drawableLeft="@android:drawable/ic_menu_edit"
+                    android:drawablePadding="10dp" />
+                <EditText
+                    android:id="@+id/edtTenSP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Tên sản phẩm"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:drawableLeft="@android:drawable/ic_menu_edit"
+                    android:drawablePadding="10dp" />
+
+                <EditText
+                    android:id="@+id/edtGiaSP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Giá sản phẩm"
+                    android:inputType="numberDecimal"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:drawableLeft="@android:drawable/ic_menu_info_details"
+                    android:drawablePadding="10dp"
+                    android:layout_marginTop="10dp" />
+
+                <EditText
+                    android:id="@+id/edtNgaySX"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ngày sản xuất (dd/MM/yyyy)"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                    android:drawablePadding="10dp"
+                    android:layout_marginTop="10dp" />
+
+                <EditText
+                    android:id="@+id/edtHanSD"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Hạn sử dụng (dd/MM/yyyy)"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:drawableLeft="@android:drawable/ic_menu_my_calendar"
+                    android:drawablePadding="10dp"
+                    android:layout_marginTop="10dp" />
+
+                <EditText
+                    android:id="@+id/edtSoLuong"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Số lượng"
+                    android:inputType="number"
+                    android:padding="10dp"
+                    android:background="@drawable/edit_text_background"
+                    android:drawableLeft="@android:drawable/ic_menu_sort_by_size"
+                    android:drawablePadding="10dp"
+                    android:layout_marginTop="10dp" />
+
+                <Spinner
+                    android:id="@+id/spnLoaiSP"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/spinner_background" />
+
+                <Button
+                    android:id="@+id/btnLuu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="💾 Lưu sản phẩm"
+                    android:background="@color/purple_500"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="15dp" />
+
+                <Button
+                    android:id="@+id/btnXoa"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="🗑️ Xóa sản phẩm"
+                    android:background="@android:color/holo_red_dark"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+    </LinearLayout>
+</ScrollView>

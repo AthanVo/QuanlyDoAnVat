@@ -5,4 +5,5 @@
     <color name="colorPrimary">#3F5185</color>
     <color name="colorSecondary">#E63946</color>
     <color name="colorBackground">#F8F9FA</color>
+    <color name="purple_500">#801AE0</color>
 </resources>
