@@ -144,17 +144,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    // Khởi tạo danh sách sản phẩm
+    /**
+     * Khởi tạo danh sách sản phẩm mặc định
+     */
+
     private void initProductList() {
         if (productList.isEmpty()) { // Chỉ thêm sản phẩm nếu danh sách trống
-            productList.add(new Product("Snack Bò Khô", "Đồ ăn vặt", 25000, "01/01/2024", "01/01/2025", 20));
-            productList.add(new Product("Bim Bim Cay", "Đồ ăn vặt", 15000, "02/01/2024", "02/01/2025", 15));
-            productList.add(new Product("Kẹo Mút Trái Cây", "Kẹo", 5000, "03/01/2024", "03/01/2025", 50));
-            productList.add(new Product("Bánh Quy Socola", "Bánh", 30000, "04/01/2024", "04/01/2025", 10));
+            productList.add(new Product("Snack Bò Khô", "Đồ ăn vặt", 25000.0, "01/01/2024", "01/01/2025", 20));
+            productList.add(new Product("Bim Bim Cay", "Đồ ăn vặt", 15000.0, "02/01/2024", "02/01/2025", 15));
+            productList.add(new Product("Kẹo Mút Trái Cây", "Kẹo", 5000.0, "03/01/2024", "03/01/2025", 50));
+            productList.add(new Product("Bánh Quy Socola", "Bánh", 30000.0, "04/01/2024", "04/01/2025", 10));
         }
     }
 
-    // Ẩn bàn phím ảo
+
+    /**
+     * Ẩn bàn phím ảo
+     */
     private void hideKeyboard() {
         View view = this.getCurrentFocus();
         if (view != null) {

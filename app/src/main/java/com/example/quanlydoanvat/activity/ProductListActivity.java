@@ -3,6 +3,7 @@ package com.example.quanlydoanvat.activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,6 +22,11 @@ import com.example.quanlydoanvat.adapter.ProductAdapter;
 import com.example.quanlydoanvat.model.Product;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,19 +35,20 @@ public class ProductListActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private ProductAdapter productAdapter;
-    private List<Product> productList;
+    private List<Product> productList, filteredList;
     private Spinner spinnerCategory;
     private FloatingActionButton fabAddProduct;
-    private Button btnDangXuat; // Logout button
+    private Button btnDangXuat;
     private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
     private static final int REQUEST_CODE_ADD = 1;
+    private List<String> loaiSanPhamList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_list);
 
-        // Kiểm tra trạng thái đăng nhập
         mAuth = FirebaseAuth.getInstance();
         if (mAuth.getCurrentUser() == null) {
             Toast.makeText(this, "Vui lòng đăng nhập lại!", Toast.LENGTH_SHORT).show();
@@ -54,28 +62,29 @@ public class ProductListActivity extends AppCompatActivity {
         fabAddProduct = findViewById(R.id.fabAddProduct);
         btnDangXuat = findViewById(R.id.btnDangXuat);
 
-        // Dữ liệu mẫu (có thể thay bằng Firebase hoặc Database)
-        productList = new ArrayList<>();
-        productList.add(new Product("Snack Khoai Tây", "Đồ ăn vặt", 25000, "01/01/2024", "01/01/2025", 20));
-        productList.add(new Product("Bim Bim Tôm Cay", "Đồ ăn mặn", 18000, "15/12/2023", "15/06/2024", 35));
-        productList.add(new Product("Kẹo Dẻo Trái Cây", "Đồ ngọt", 30000, "20/11/2023", "20/05/2024", 15));
+        databaseReference = FirebaseDatabase.getInstance().getReference("products");
 
-        // Setup RecyclerView
+        productList = new ArrayList<>();
+        filteredList = new ArrayList<>();
+        productAdapter = new ProductAdapter(filteredList, this::onProductClick);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        productAdapter = new ProductAdapter(productList, this::onProductClick);
         recyclerView.setAdapter(productAdapter);
 
-        // Setup Spinner (Dropdown)
-        List<String> categories = new ArrayList<>();
-        categories.add("Tất cả");
-        categories.add("Đồ ăn vặt");
-        categories.add("Đồ ăn mặn");
-        categories.add("Đồ ngọt");
+        // **Danh sách loại sản phẩm**
+        loaiSanPhamList = new ArrayList<>();
+        loaiSanPhamList.add("Tất cả");
+        loaiSanPhamList.add("Đồ ăn vặt");
+        loaiSanPhamList.add("Đồ ngọt");
+        loaiSanPhamList.add("Đồ cay");
+        loaiSanPhamList.add("Đồ mặn");
+        loaiSanPhamList.add("Nước uống");
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, categories);
+        // **Gán danh sách vào Spinner**
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, loaiSanPhamList);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerCategory.setAdapter(spinnerAdapter);
 
+        // **Lắng nghe sự kiện chọn loại sản phẩm**
         spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -88,22 +97,47 @@ public class ProductListActivity extends AppCompatActivity {
             }
         });
 
-        // Thêm sản phẩm mới
+        // **Tải danh sách sản phẩm từ Firebase**
+        loadProductsFromFirebase();
+
         fabAddProduct.setOnClickListener(v -> {
             Intent intent = new Intent(ProductListActivity.this, AddProductActivity.class);
             startActivityForResult(intent, REQUEST_CODE_ADD);
         });
 
-        // Đăng xuất
         btnDangXuat.setOnClickListener(v -> logoutUser());
     }
 
-    private void filterProducts(String category) {
-        if (productList == null) {
-            return;  // Tránh lỗi NullPointerException
-        }
+    /**
+     * **Tải danh sách sản phẩm từ Firebase**
+     */
+    private void loadProductsFromFirebase() {
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                productList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Product product = dataSnapshot.getValue(Product.class);
+                    if (product != null) {
+                        productList.add(product);
+                    }
+                }
+                filterProducts(spinnerCategory.getSelectedItem().toString());
+            }
 
-        List<Product> filteredList = new ArrayList<>();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ProductListActivity.this, "Lỗi khi tải dữ liệu!", Toast.LENGTH_SHORT).show();
+                Log.e("FirebaseData", "Lỗi: " + error.getMessage());
+            }
+        });
+    }
+
+    /**
+     * **Lọc danh sách sản phẩm theo loại**
+     */
+    private void filterProducts(String category) {
+        filteredList.clear();
         if (category.equals("Tất cả")) {
             filteredList.addAll(productList);
         } else {
@@ -113,7 +147,7 @@ public class ProductListActivity extends AppCompatActivity {
                 }
             }
         }
-        productAdapter.updateProductList(filteredList);
+        productAdapter.notifyDataSetChanged();
     }
 
     private void onProductClick(Product product) {
@@ -123,16 +157,20 @@ public class ProductListActivity extends AppCompatActivity {
         }
 
         Intent intent = new Intent(ProductListActivity.this, AddEditActivity.class);
-        intent.putExtra("product", product);
-        startActivityForResult(intent, REQUEST_CODE_ADD);
+        intent.putExtra("id", product.getId());
+        intent.putExtra("tenSP", product.getTenSP());
+        intent.putExtra("loaiSP", product.getLoaiSP());
+        intent.putExtra("giaSP", product.getGiaSP());
+        intent.putExtra("ngaySX", product.getNgaySX());
+        intent.putExtra("hanSD", product.getHanSD());
+        intent.putExtra("soLuong", product.getSoLuong());
+        startActivity(intent);
     }
 
     private void logoutUser() {
         mAuth.signOut();
-
         SharedPreferences sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
-        sharedPreferences.edit().clear().commit();  // Dùng commit() thay vì apply()
-
+        sharedPreferences.edit().clear().commit();
         Toast.makeText(ProductListActivity.this, "Đăng xuất thành công!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(ProductListActivity.this, MainActivity.class));
         finish();
@@ -148,11 +186,7 @@ public class ProductListActivity extends AppCompatActivity {
 
                 if (newProduct != null) {
                     productList.add(newProduct);
-                    productAdapter.notifyDataSetChanged();
-
-                    // Refresh list based on selected category
-                    String selectedCategory = spinnerCategory.getSelectedItem().toString();
-                    filterProducts(selectedCategory);
+                    filterProducts(spinnerCategory.getSelectedItem().toString());
                 }
             } else {
                 Toast.makeText(this, "Dữ liệu không hợp lệ. Vui lòng thử lại.", Toast.LENGTH_SHORT).show();

@@ -43,12 +43,17 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ProductV
     @Override
     public void onBindViewHolder(@NonNull ProductViewHolder holder, int position) {
         Product product = productList.get(position);
+
+        // Không cần chuyển đổi ngày tháng vì dữ liệu đã lưu dưới dạng String
+        String ngaySX = product.getNgaySX();
+        String hanSD = product.getHanSD();
+
         holder.tvProductName.setText(product.getTenSP());
         holder.tvProductCategory.setText(product.getLoaiSP());
         holder.tvProductPrice.setText(product.getGiaSP() + " VNĐ");
         holder.tvProductQuantity.setText("SL: " + product.getSoLuong());
-        holder.tvManufactureDate.setText("NSX: " + product.getNgaySX());
-        holder.tvExpiryDate.setText("HSD: " + product.getHanSD());
+        holder.tvManufactureDate.setText("NSX: " + ngaySX);
+        holder.tvExpiryDate.setText("HSD: " + hanSD);
 
         holder.itemView.setOnClickListener(v -> listener.onProductClick(product));
     }

@@ -26,15 +26,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/edtLoaiSP"
+                <Spinner
+                    android:id="@+id/spnLoaiSP"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Loại sản phẩm"
-                    android:padding="10dp"
-                    android:background="@drawable/edit_text_background"
-                    android:drawableLeft="@android:drawable/ic_menu_edit"
-                    android:drawablePadding="10dp" />
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/spinner_background" />
+
+
 
                 <EditText
                     android:id="@+id/edtTenSP"

@@ -1,8 +1,6 @@
 package com.example.quanlydoanvat.activity;
 
-import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -15,6 +13,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.quanlydoanvat.R;
 import com.example.quanlydoanvat.model.Product;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
 
@@ -34,10 +34,8 @@ public class AddProductActivity extends AppCompatActivity {
         edtLoaiSP = findViewById(R.id.edtLoaiSP);
         edtGiaSP = findViewById(R.id.edtGiaSP);
         edtSoLuong = findViewById(R.id.edtSoLuong);
-
         tvNgaySX = findViewById(R.id.tvNgaySX);
         tvHanSD = findViewById(R.id.tvHanSD);
-
         btnLuu = findViewById(R.id.btnLuu);
         btnTroLai = findViewById(R.id.btnTroLai);
 
@@ -55,7 +53,7 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
     /**
-     * Hàm hiển thị DatePickerDialog để chọn ngày
+     * Hiển thị DatePickerDialog để chọn ngày
      */
     private void showDatePickerDialog(final TextView textView) {
         final Calendar calendar = Calendar.getInstance();
@@ -66,7 +64,7 @@ public class AddProductActivity extends AppCompatActivity {
         DatePickerDialog datePickerDialog = new DatePickerDialog(this,
                 (view, selectedYear, selectedMonth, selectedDay) -> {
                     // Định dạng ngày dd/MM/yyyy
-                    String selectedDate = selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                    String selectedDate = String.format("%02d/%02d/%04d", selectedDay, selectedMonth + 1, selectedYear);
                     textView.setText(selectedDate);
                 },
                 year, month, day);
@@ -74,7 +72,7 @@ public class AddProductActivity extends AppCompatActivity {
     }
 
     /**
-     * Hàm lưu sản phẩm mới
+     * Lưu sản phẩm mới vào Firebase
      */
     private void saveProduct() {
         String tenSP = edtTenSP.getText().toString().trim();
@@ -96,17 +94,26 @@ public class AddProductActivity extends AppCompatActivity {
             double gia = Double.parseDouble(giaSP);
             int sl = Integer.parseInt(soLuong);
 
-            Product newProduct = new Product(tenSP, loaiSP, gia, ngaySX, hanSD, sl);
+            // **Tạo id duy nhất cho sản phẩm mới**
+            DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("products");
+            String productId = databaseReference.push().getKey();
 
-            // Truyền dữ liệu sản phẩm mới về ProductListActivity
-            Intent resultIntent = new Intent();
-            resultIntent.putExtra("newProduct", newProduct);
-            setResult(Activity.RESULT_OK, resultIntent);
+            // **Tạo đối tượng Product với id**
+            Product newProduct = new Product(productId, tenSP, loaiSP, gia, ngaySX, hanSD, sl);
 
-            Toast.makeText(this, "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
-            finish();
+            // Lưu vào Firebase
+            databaseReference.child(productId).setValue(newProduct).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Toast.makeText(AddProductActivity.this, "Thêm sản phẩm thành công!", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(AddProductActivity.this, "Lỗi khi lưu sản phẩm!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Giá hoặc số lượng không hợp lệ!", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
