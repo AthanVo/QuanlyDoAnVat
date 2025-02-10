@@ -34,24 +34,66 @@ public class Product implements Serializable {
     }
 
     // Getter & Setter
-    public String getId() { return id; }
-    public void setId(String id) { this.id = id; }
+    public String getId()
+    {
+        return id;
+    }
+    public void setId(String id)
+    {
+        this.id = id;
+    }
 
-    public String getTenSP() { return tenSP; }
-    public void setTenSP(String tenSP) { this.tenSP = tenSP; }
+    public String getTenSP()
+    {
+        return tenSP;
+    }
+    public void setTenSP(String tenSP)
+    {
+        this.tenSP = tenSP;
+    }
 
-    public String getLoaiSP() { return loaiSP; }
-    public void setLoaiSP(String loaiSP) { this.loaiSP = loaiSP; }
+    public String getLoaiSP()
+    {
+        return loaiSP;
+    }
+    public void setLoaiSP(String loaiSP)
+    {
+        this.loaiSP = loaiSP;
+    }
 
-    public double getGiaSP() { return giaSP; }
-    public void setGiaSP(double giaSP) { this.giaSP = giaSP; }
+    public double getGiaSP()
+    {
+        return giaSP;
+    }
+    public void setGiaSP(double giaSP)
+    {
+        this.giaSP = giaSP;
+    }
 
-    public String getNgaySX() { return ngaySX; }
-    public void setNgaySX(String ngaySX) { this.ngaySX = ngaySX; }
+    public String getNgaySX()
+    {
+        return ngaySX;
+    }
+    public void setNgaySX(String ngaySX)
+    {
+        this.ngaySX = ngaySX;
+    }
 
-    public String getHanSD() { return hanSD; }
-    public void setHanSD(String hanSD) { this.hanSD = hanSD; }
+    public String getHanSD()
+    {
+        return hanSD;
+    }
+    public void setHanSD(String hanSD)
+    {
+        this.hanSD = hanSD;
+    }
 
-    public int getSoLuong() { return soLuong; }
-    public void setSoLuong(int soLuong) { this.soLuong = soLuong; }
+    public int getSoLuong()
+    {
+        return soLuong;
+    }
+    public void setSoLuong(int soLuong)
+    {
+        this.soLuong = soLuong;
+    }
 }
