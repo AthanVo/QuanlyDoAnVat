@@ -48,18 +48,19 @@ public class MainActivity extends AppCompatActivity {
         btnDangNhap = findViewById(R.id.btnDangNhap);
         btnDangKy = findViewById(R.id.btnDangKy);
         checkBoxLuu = findViewById(R.id.checkBoxLuu);
-        progressBar = findViewById(R.id.progressBar);
+        progressBar = findViewById(R.id.progressBar); // Thêm ánh xạ ProgressBar
 
         // Khởi tạo SharedPreferences
         sharedPreferences = getSharedPreferences("loginPrefs", MODE_PRIVATE);
 
-        // Kiểm tra trạng thái đăng nhập
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (currentUser != null) {
-            // Người dùng đã đăng nhập, chuyển đến màn hình chính
-            startActivity(new Intent(MainActivity.this, ProductListActivity.class));
-            finish();
-        }
+        // Kiểm tra trạng thái đăng nhập bằng AuthStateListener
+        mAuth.addAuthStateListener(firebaseAuth -> {
+            FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+            if (currentUser != null) {
+                startActivity(new Intent(MainActivity.this, ProductListActivity.class));
+                finish();
+            }
+        });
 
         // Tự động điền thông tin đăng nhập nếu đã lưu
         if (sharedPreferences.getBoolean("remember", false)) {
@@ -98,15 +99,17 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "Đăng nhập thành công!", Toast.LENGTH_SHORT).show();
 
                                 // Lưu thông tin đăng nhập nếu người dùng chọn "Lưu mật khẩu"
+                                SharedPreferences.Editor editor = sharedPreferences.edit();
                                 if (checkBoxLuu.isChecked()) {
-                                    SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.putString("username", email);
                                     editor.putString("password", password);
                                     editor.putBoolean("remember", true);
-                                    editor.apply();
                                 } else {
-                                    sharedPreferences.edit().clear().apply();
+                                    editor.remove("username");
+                                    editor.remove("password");
+                                    editor.remove("remember");
                                 }
+                                editor.apply();
 
                                 // Khởi tạo danh sách sản phẩm và chuyển đến màn hình chính
                                 initProductList();
@@ -139,18 +142,17 @@ public class MainActivity extends AppCompatActivity {
         btnDangKy.setOnClickListener(v -> {
             startActivity(new Intent(MainActivity.this, RegisterActivity.class));
         });
-
-
     }
 
     // Khởi tạo danh sách sản phẩm
     private void initProductList() {
-        productList.add(new Product("Snack Bò Khô", "Đồ ăn vặt", 25000, "01/01/2024", "01/01/2025", 20));
-        productList.add(new Product("Bim Bim Cay", "Đồ ăn vặt", 15000, "02/01/2024", "02/01/2025", 15));
-        productList.add(new Product("Kẹo Mút Trái Cây", "Kẹo", 5000, "03/01/2024", "03/01/2025", 50));
-        productList.add(new Product("Bánh Quy Socola", "Bánh", 30000, "04/01/2024", "04/01/2025", 10));
+        if (productList.isEmpty()) { // Chỉ thêm sản phẩm nếu danh sách trống
+            productList.add(new Product("Snack Bò Khô", "Đồ ăn vặt", 25000, "01/01/2024", "01/01/2025", 20));
+            productList.add(new Product("Bim Bim Cay", "Đồ ăn vặt", 15000, "02/01/2024", "02/01/2025", 15));
+            productList.add(new Product("Kẹo Mút Trái Cây", "Kẹo", 5000, "03/01/2024", "03/01/2025", 50));
+            productList.add(new Product("Bánh Quy Socola", "Bánh", 30000, "04/01/2024", "04/01/2025", 10));
+        }
     }
-
 
     // Ẩn bàn phím ảo
     private void hideKeyboard() {
